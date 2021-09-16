@@ -148,8 +148,8 @@ for idx_cmr = 1 : size(pts_img, 2)
     % R_est = R_tf * R_inst
     R_inst = R_tf' * R_est;
 
-%     euld(3:-1:1,idx_cmr) = rad2deg(rotm2eul(R_inst, 'ZYX')');
-    euld(3:-1:1,idx_cmr) = rad2deg(rot2eul(R_inst, 'ZYX'));
+    euld(3:-1:1,idx_cmr) = rad2deg(rotm2eul(R_inst, 'ZYX')');
+%     euld(3:-1:1,idx_cmr) = rad2deg(rot2eul(R_inst, 'ZYX'));
     
     
     % rx = atand(R(3,2)/R(3,3));
