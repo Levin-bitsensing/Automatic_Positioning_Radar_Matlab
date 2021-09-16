@@ -148,8 +148,10 @@ for idx_cmr = 1 : size(pts_img, 2)
     % R_est = R_tf * R_inst
     R_inst = R_tf' * R_est;
 
-    euld(3:-1:1,idx_cmr) = rad2deg(rotm2eul(R_inst, 'ZYX')');
-     
+%     euld(3:-1:1,idx_cmr) = rad2deg(rotm2eul(R_inst, 'ZYX')');
+    euld(3:-1:1,idx_cmr) = rad2deg(rot2eul(R_inst, 'ZYX'));
+    
+    
     % rx = atand(R(3,2)/R(3,3));
     % ry = atand(-R(3,1)/sqrt(R(3,2)*R(3,2)+R(3,3)*R(3,3)));
     % rz = atand(R(2,1)/R(1,1));
@@ -265,7 +267,27 @@ if SHOW_3D_VIEW
         text_pos = BASE(:,1) + 7 * (BASE(:,1) - cmr_pos_origin);
         text_pos(3) = text_pos(3) + 3;
         text(text_pos(1), text_pos(2), text_pos(3), num2str(idx_cmr));
-        
+       
     end
 end
+
+
+function [eul] = rot2eul(R, seq)
+    if strcmp(seq, 'ZYX')
+        sy = sqrt(R(1,1) * R(1,1) + R(2,1) * R(2,1));
+
+        if sy > 1e-6
+            eul(1) = atan2(R(3, 2), R(3, 3));
+            eul(2) = atan2(-R(3, 1), sy);
+            eul(3) = atan2(R(2, 1), R(1, 1));
+        else
+            eul(1) = atan2(-R(2, 3), R(2, 2));
+            eul(2) = atan2(-R(3, 1), sy);
+            eul(3) = 0;
+        end
+    else
+        error('unsupported rotation sequence')
+    end
+end
+
 
